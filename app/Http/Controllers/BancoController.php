@@ -28,14 +28,11 @@ class BancoController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->id > 0){
-            $banco = Banco::find($request->id);
-        }else{
-            $banco = new Banco();
-        }
-            $banco->fill($request->all());
-            $banco->save();
-            return $banco;
+        if($request->id > 0){ $banco = Banco::find($request->id); }
+        else                { $banco = new Banco(); }
+        $banco->fill($request->all());
+        $banco->save();
+        return $banco;
     }
 
     /**

@@ -9,8 +9,10 @@ class Banco extends Model
 {
     use HasFactory;
     
-    /* protected $table = 'bancos'; */
-    protected $fillable = ["nombre","siglas"];
+    protected $table = 'bancos';
+    //masivo a todo
+    protected $guarded = [];
+    // protected $fillable = ["nombre","siglas"];
     public function hola() {
 
         return $this->primaryKey;
