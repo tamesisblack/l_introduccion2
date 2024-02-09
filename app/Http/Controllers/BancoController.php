@@ -12,7 +12,26 @@ class BancoController extends Controller
      */
     public function index()
     {
-        return "hola mundo";
+        $query = Banco::all();
+        $setQuery = collect($query);
+        $resultado = $setQuery->filter(function($item,$key){
+            return $item->siglas == null;
+        })->values();
+
+        //solo obtener los nombres en un array
+        $getOnlyNombres = $resultado->pluck('nombre');
+        return $getOnlyNombres;
+        // return $query;
+        // $coleccion = collect([
+        //     "edad" => "15",
+        //     "nombre" => "juan",
+            
+        // ]);
+        // $resultado = $coleccion->map(function($item, $key){
+        //     if($key == "nombre"){ return $item . " - " . "hola mundo"; }
+        //     return $item;
+        // });
+         return $resultado;
     }
 
     /**
