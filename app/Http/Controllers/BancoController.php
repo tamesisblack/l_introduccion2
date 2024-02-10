@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Banco;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 class BancoController extends Controller
 {
     /**
@@ -12,39 +12,61 @@ class BancoController extends Controller
      */
     public function index()
     {
-
-        $collection1 = collect([
-            (object) ['id' => 1, 'name' => 'Object A'],
-            (object) ['id' => 2, 'name' => 'Object B'],
-            (object) ['id' => 3, 'name' => 'Object C'],
-        ]);
-        
-        $collection2 = collect([
-            (object) ['id' => 1, 'name' => 'Object e'],
-            (object) ['id' => 2, 'name' => 'Object B'],
-            (object) ['id' => 4, 'name' => 'Object D'],
-        ]);
-        
-        // Convertir cada objeto a su ID para la comparación
-        $ids1 = $collection1->pluck('id');
-        $ids2 = $collection2->pluck('id');
-        
-        $difference = $ids1->diff($ids2);
-        // Filtrar la colección original para obtener solo los objetos cuyos IDs están en la diferencia
-        $differentObjects = $collection1->filter(function ($item) use ($difference) {
-            return $difference->contains($item->id);
+        $query = Banco::all()->each(function($item,$key){
+            if($item->siglas === null){
+                $item->siglas = "N/A";
+            }
+        })
+        ->filter(function($item,$key){
+            return $item->id > 5;
         });
+        return $query;
+        // $query = Banco::all()->each(function ($item, $key) {
+        //     if ($item->siglas === null) {
+        //         $item->siglas = "N/A";
+        //     }
+        // })->filter(function ($item, $key) {
+        //     return $item->id > 1;
+        // })->values();
+        // $users = [
+        //     (object) ['name' => 'Alice', 'email' => 'alice@example.com'],
+        //     (object) ['name' => 'Bob', 'email' => 'bob@example.com'],
+        //     (object) ['name' => 'Charlie', 'email' => 'charlie@example.com'],
+        // ];
+        // $usersCollection = collect($users);
+
+        // $resultado = $usersCollection->map(function($item,$key){
+        //     return $item->name;
+        // });
+        // return $resultado;
+        // $collection = collect([1, 2, 3, 4, 5]);
         
-        // Mostrar los objetos diferentes
-        foreach ($differentObjects as $obj) {
-            echo "ID: {$obj->id}, Name: {$obj->name}\n";
-        }
-             ///COMBINAR
-            //  $keys = collect(['nombre', 'edad']);
-            //  $values = collect(['Alice', 25]);
-     
-            //  $combined = $keys->combine($values);
-            //  return $combined;
+        // $result = $collection->tap(function ($collection) {
+        //     // Asegúrate de pasar un array como segundo argumento a Log::info
+        //     Log::info('Valor máximo antes de duplicar:', ['max' => $collection->max()]);
+        // })
+        // ->map(function ($value) {
+        //     // Duplicar cada elemento de la colección.
+        //     return $value * 2;
+        // })
+        // ->tap(function ($collection) {
+        //     // De nuevo, asegúrate de pasar un array como segundo argumento a Log::info
+        //     Log::info('Valor máximo después de duplicar:', ['max' => $collection->max()]);
+        // })
+        // ->filter(function ($value) {
+        //     // Filtrar la colección para conservar solo los valores mayores que 5.
+        //     return $value > 5;
+        // });
+        // return $result->all();
+        // $result contiene los valores [6, 8, 10], después de duplicar y filtrar.
+        
+        
+        ///COMBINAR
+        //  $keys = collect(['nombre', 'edad']);
+        //  $values = collect(['Alice', 25]);
+
+        //  $combined = $keys->combine($values);
+        //  return $combined;
         // $query = Banco::all();
         // $collection = collect($query);
 
