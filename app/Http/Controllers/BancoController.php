@@ -5,22 +5,93 @@ namespace App\Http\Controllers;
 use App\Models\Banco;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+class Usuarios {
+    public $name;
+    public $email;
+    public $edad;
+    public function __construct($datos) {
+        $this->name = $datos['name'];
+        $this->email = $datos['email'];
+        $this->edad = $datos['edad'];
+    }
+    public function mostrarNombre(){
+        return $this->name;
+    }
+    public function saludar(){
+        return "Hola, mi nombre es " . $this->name;
+    
+    }
+}
 class BancoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $query = Banco::all()->each(function($item,$key){
-            if($item->siglas === null){
-                $item->siglas = "N/A";
-            }
-        })
-        ->filter(function($item,$key){
-            return $item->id > 5;
+    {   
+        //AGRUPA POR CATEGORIAS
+        $collection = collect([
+            ['category' => 'Fruits', 'name' => 'Apple'],
+            ['category' => 'Fruits', 'name' => 'Banana'],
+            ['category' => 'Vegetables', 'name' => 'Carrot']
+        ]);
+        
+        $grouped = $collection->mapToDictionary(function ($item) {
+            return [$item['category'] => $item['name']];
         });
-        return $query;
+        return $grouped->all();
+
+
+        // $usersData = collect([
+        //     ['name' => 'Alice', 'email' => 'alice@example.com',"edad" => 15],
+        //     ['name' => 'Bob', 'email' => 'bob@example.com', "edad" => 20],
+           
+        // ]);
+    
+        // $users = $usersData->mapInto(Usuarios::class);
+        // $users->each(function ($propiedad) {
+        //     echo $propiedad->saludar();
+        //     echo "<br>";
+        // });
+
+
+
+        // $collection = collect([
+        //     ['id' => 1, 'name' => 'Producto A', 'price' => 100],
+        //     ['id' => 2, 'name' => 'Producto B', 'price' => 150],
+        // ]);
+        
+        // $newCollection = $collection->mapWithKeys(function ($item) {
+        //     return [
+        //         $item['id'] => 
+        //         [
+        //             'nombre' => $item['name'], 
+        //             'precio' => $item['price']
+        //         ]
+        //     ];
+        // })->values();
+        // return $newCollection;
+
+        // $usuarios = collect([
+        //     ['id' => 1, 'nombre' => 'Juan Pérez', 'email' => 'juan@example.com'],
+        //     ['id' => 2, 'nombre' => 'Ana Gómez', 'email' => 'ana@example.com'],
+        //     ['id' => 3, 'nombre' => 'Luis Martínez', 'email' => 'luis@example.com'],
+        // ]);
+        // $usuariosTransformados = $usuarios->mapWithKeys(function ($usuario) {
+        //     return [$usuario['id'] => "{$usuario['nombre']} - {$usuario['email']}"];
+        // });
+        // return $usuariosTransformados;
+        // $query = Banco::all()->each(function($item,$key){
+        //     if($item->siglas === null){
+        //         $item->siglas = "N/A";
+        //     }
+        // })
+        // ->filter(function($item,$key){
+        //     return $item->id > 5;
+        // });
+        // return $query;
+
+
         // $query = Banco::all()->each(function ($item, $key) {
         //     if ($item->siglas === null) {
         //         $item->siglas = "N/A";
@@ -28,6 +99,9 @@ class BancoController extends Controller
         // })->filter(function ($item, $key) {
         //     return $item->id > 1;
         // })->values();
+
+
+
         // $users = [
         //     (object) ['name' => 'Alice', 'email' => 'alice@example.com'],
         //     (object) ['name' => 'Bob', 'email' => 'bob@example.com'],
