@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Banco extends Model
 {
@@ -16,5 +17,34 @@ class Banco extends Model
     public function hola() {
 
         return $this->primaryKey;
+    }
+    protected static function boot()
+    {
+        parent::boot();
+        //antes que se cree un nuevo banco
+        static::creating(function ($banco) {
+            $banco->nombre = strtoupper($banco->nombre);
+        });
+        //cuando se haya creado
+        static::created(function($banco){
+            Log::info("Se ha creado el banco con id: " . $banco->id);
+        });
+        //antes que se vaya a actualizar
+        static::updating(function($banco){
+            $banco->siglas = strtoupper($banco->siglas);
+        });
+        //despues que se actualizo
+        static::updated(function ($banco) {
+            Log::info("Se ha actualizado el banco con id: " . $banco->id);
+        });
+        static::deleting(function ($post) {
+            // Lógica antes de la eliminación
+            // Por ejemplo, eliminar relaciones o recursos asociados
+        });
+
+        static::deleted(function ($post) {
+            // Lógica después de la eliminación
+            // Por ejemplo, registrar la acción o limpiar cachés
+        });
     }
 }
