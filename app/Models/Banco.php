@@ -21,6 +21,12 @@ class Banco extends Model
     protected static function boot()
     {
         parent::boot();
+        //Se ejecuta despues del select
+        static::retrieved(function ($user) {
+            // Lógica a ejecutar después de recuperar el modelo
+            // Por ejemplo, ajustar el formato de la fecha de nacimiento
+            $user->birthdate = $user->birthdate->format('d/m/Y');
+        });
         //antes que se cree un nuevo banco
         static::creating(function ($banco) {
             $banco->nombre = strtoupper($banco->nombre);
