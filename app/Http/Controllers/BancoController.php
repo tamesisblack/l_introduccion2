@@ -29,17 +29,36 @@ class BancoController extends Controller
      */
     public function index()
     {   
-        //AGRUPA POR CATEGORIAS
-        $collection = collect([
-            ['category' => 'Fruits', 'name' => 'Apple'],
-            ['category' => 'Fruits', 'name' => 'Banana'],
-            ['category' => 'Vegetables', 'name' => 'Carrot']
-        ]);
-        
-        $grouped = $collection->mapToDictionary(function ($item) {
-            return [$item['category'] => $item['name']];
+/////////////////////////SILENCIAR EVENTOS
+        Banco::withoutEvents(function () {
+            Banco::create([
+                'nombre' => 'Banco 1',
+                'siglas' => 'B1'
+            ]);
         });
-        return $grouped->all();
+
+        //BUSCAR SI NO EXISTE EL BANCO
+        $query = Banco::Where('nombre','Goku')
+        ->firstOr(function(){
+            //si no existe lo creo
+            return Banco::create([
+                'nombre' => 'Goku',
+                'siglas' => 'GK'
+            ]);
+        });
+        return $query;
+
+        //AGRUPA POR CATEGORIAS
+        // $collection = collect([
+        //     ['category' => 'Fruits', 'name' => 'Apple'],
+        //     ['category' => 'Fruits', 'name' => 'Banana'],
+        //     ['category' => 'Vegetables', 'name' => 'Carrot']
+        // ]);
+        
+        // $grouped = $collection->mapToDictionary(function ($item) {
+        //     return [$item['category'] => $item['name']];
+        // });
+        // return $grouped->all();
 
 
         // $usersData = collect([

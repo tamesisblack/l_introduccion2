@@ -25,7 +25,7 @@ class Banco extends Model
         static::retrieved(function ($user) {
             // Lógica a ejecutar después de recuperar el modelo
             // Por ejemplo, ajustar el formato de la fecha de nacimiento
-            $user->birthdate = $user->birthdate->format('d/m/Y');
+            // $user->birthdate = $user->birthdate->format('d/m/Y');
         });
         //antes que se cree un nuevo banco
         static::creating(function ($banco) {
