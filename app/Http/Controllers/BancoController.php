@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Banco;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 class Usuarios {
     public $name;
@@ -192,7 +193,47 @@ class BancoController extends Controller
 
  
     }
+    public function metodo1(Request $request){
+    
+            //IS DIRTY SI LOS DATOS HAN CAMBIADO GUARDO LOS CAMBIOS EN LA BASE DE DATOS SI NO HAGO NADA
+            // Recuperar el usuario actual
+            $user = Auth::user();
+        
+            // Actualizar los atributos del usuario con los datos del formulario
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->shipping_address = $request->input('shipping_address');
+        
+            // Verificar si los datos del usuario han cambiado
+            if ($user->isDirty()) {
+                // Los datos han cambiado, guardar los cambios en la base de datos
+                $user->save();
+                return redirect()->back()->with('success', 'Perfil actualizado correctamente.');
+            } else {
+                // Los datos no han cambiado, redirigir de nuevo sin hacer nada
+                return redirect()->back()->with('info', 'No se realizaron cambios en el perfil.');
+            }
 
+            ///OTRO EJEMPLO SE RECUPERA UN ARTICULO Y DEL FRONT SE ENVIA DATOS 
+                // Obtener el artículo existente desde la base de datos Se valida si title body  o category_id han cambiado Guardo si no  no hago nada
+                // $article = Article::findOrFail($id);
+
+                // // Actualizar los atributos del artículo con los datos del formulario
+                // $article->title = $request->input('title');
+                // $article->body = $request->input('body');
+                // $article->category_id = $request->input('category_id');
+
+                // // Verificar si los datos del artículo han cambiado
+                // if ($article->isDirty()) {
+                //     // Los datos han cambiado, guardar los cambios en la base de datos
+                //     $article->save();
+                //     return redirect()->route('articles.index')->with('success', 'Artículo actualizado correctamente.');
+                // } else {
+                //     // Los datos no han cambiado, redirigir sin hacer nada
+                //     return redirect()->back()->with('info', 'No se realizaron cambios en el artículo.');
+                // }
+        
+    }
     /**
      * Show the form for creating a new resource.
      */
